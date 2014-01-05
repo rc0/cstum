@@ -1,0 +1,38 @@
+Thoughts on new overlay file encoding
+
+
+A = angle
+Z = size
+C = colour
+L = length
+E = est NOT obs
+X = coord
+Y = coord
+K = count
+
+000AAAAA                 : Vane (long)
+001AAAAA                 : Vane (short)
+010AAAAA ZZZZCCCC        : Sector
+0110KKKK ZZZZCCCC        : Circle
+0111KKKK ZZZZCCCC        : Donut
+1000KKKK E...CCCC        : adjacent tower
+1001KKKK ELLLCCCC + text : normal tower
+1010KKKK                 : multiple tower
+1011KKKK                 : null area
+1100KKKK                 : skip
+1101ZZZZ                 : blank region with log2(side length)
+1101....                 : reserved
+1110....                 : reserved
+11110000 XXXXYYYY        : Absolute position DEPRECATE
+11110000 KKKKKKKK        : wide skip
+1111....                 : reserved
+11111111                 : End of stream
+
+~~~~~~~~~~~~
+....QQQQ                 : Data quality
+
+The codes with 4-bit embedded displacement encode 1...16 as 0...15.
+Sector has an implied displacement of 1.
+The skip code 0xb. applies a displacement of 1..16
+The wide skip code 0xf0 0x.. applies a displacement of 0..255
+
