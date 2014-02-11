@@ -33,66 +33,46 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tool.h"
+#include "cli.h"
 
-static void usage(const char *tool)
+static struct subcommand sub_addlacs = {/*{{{*/
+  (OPT_DATA),
+  "addlacs",
+  "find missing LACs"
+};
+/*}}}*/
+
+void usage_addlacs(void)/*{{{*/
 {
-  fprintf(stderr,
-      "Usage: %s <subcmd> [<options>] [<args>]\n"
-      "Subcommands:\n" , tool);
-  usage_cat();
-  usage_grid();
-  usage_tiles();
-  usage_tilerange();
-  usage_filter();
-  usage_tpe();
-  usage_tpr();
-  usage_tcs();
-  usage_tpcon();
-  usage_goodness();
-  usage_timecull();
-  usage_cidlist();
-  usage_overlay();
-  usage_addlacs();
+  describe(&sub_addlacs);
+}
+/*}}}*/
+
+int ui_addlacs(int argc, char **argv)/*{{{*/
+{
+  struct tower_table *table;
+  struct node *top;
+  struct cli *cli;
+  int i;
+
+  cli = parse_args(argc, argv, &sub_addlacs);
+  if (cli->n_datafiles == 0) {
+    usage_addlacs();
+    exit(2);
+  }
+  top = load_all_dbs(cli);
+  table = read_towers2("towers.dat");
+  resolve_towers(cli, table);
+
+  addlacs(top, table);
+
+  write_towers2("new_towers.dat", table);
+  free_tower_table(table);
+
+  free(top);
+
+  return 0;
 }
 
-int main (int argc, char **argv)
-{
-  if (argc < 2) {
-    usage(argv[0]);
-    exit(0);
-  }
-  if (!strcmp(argv[1], "cat")) {
-    exit(ui_cat(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "grid")) {
-    exit(ui_grid(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "tilerange")) {
-    exit(ui_tilerange(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "tiles")) {
-    exit(ui_tiles(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "filter")) {
-    exit(ui_filter(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "tpe")) {
-    exit(ui_tpe(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "tpr")) {
-    exit(ui_tpr(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "tpcon")) {
-    exit(ui_tpcon(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "tcs")) {
-    exit(ui_tcs(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "goodness")) {
-    exit(ui_goodness(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "timecull")) {
-    exit(ui_timecull(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "cidlist")) {
-    exit(ui_cidlist(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "overlay")) {
-    exit(ui_overlay(argc-2, argv+2));
-  } else if (!strcmp(argv[1], "addlacs")) {
-    exit(ui_addlacs(argc-2, argv+2));
-  } else {
-    usage(argv[0]);
-    exit(0);
-  }
-}
-
-
+/* vim:et:sts=2:sw=2:ht=2
+ * */

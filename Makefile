@@ -50,6 +50,7 @@ OBJ += ui_goodness.o
 OBJ += ui_timecull.o
 OBJ += ui_cidlist.o
 OBJ += ui_overlay.o
+OBJ += ui_addlacs.o
 
 OBJ += spatial2.o
 OBJ += temporal3.o
@@ -75,6 +76,7 @@ OBJ += cidlist.o
 OBJ += cli.o
 OBJ += correlate2.o
 OBJ += overlay.o
+OBJ += addlacs.o
 
 all : cstum listover
 

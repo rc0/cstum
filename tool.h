@@ -265,6 +265,7 @@ extern struct group *cid_to_group(struct tower_table *table, int lac, int cid);
 extern struct group *cid_to_group_near(struct tower_table *table, int cid, double lat, double lon);
 extern struct tower2 *cid_to_tower(struct tower_table *table, int lac, int cid);
 extern struct tower2 *cid_to_tower_near(struct tower_table *table, int cid, double lat, double lon);
+extern void insert_extra_lac_into_table(struct tower_table *table, struct tower2 *tow, int gen, int lac);
 extern void write_towers2(const char *filename, struct tower_table *table);
 extern void free_tower_table(struct tower_table *table);
 extern void m28_to_wgs84(const struct M28 *m28, double *lat, double *lon);
@@ -290,6 +291,7 @@ extern void tpcon_groups(struct node *top, struct tower_table *table,
 extern void goodness(struct node *cursor);
 extern void timecull(struct node *cursor);
 extern void cidlist(struct node *cursor);
+extern void addlacs(struct node *cursor, struct tower_table *table);
 
 extern int ui_cat(int argc, char **argv);
 extern void usage_cat(void);
@@ -319,6 +321,8 @@ extern int ui_cidlist(int argc, char **argv);
 extern void usage_cidlist(void);
 extern int ui_overlay(int argc, char **argv);
 extern void usage_overlay(void);
+extern int ui_addlacs(int argc, char **argv);
+extern void usage_addlacs(void);
 
 /* INLINE */
 

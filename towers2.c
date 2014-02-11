@@ -738,6 +738,32 @@ static void insert_lc_into_table(struct lc_table *table, int lac, int cid, struc
   table->chains[h] = cc;
 }
 /*}}}*/
+void insert_extra_lac_into_table(struct tower_table *table, struct tower2 *tow, int gen, int lac)
+{
+  struct group *grp;
+  for (grp = tow->groups; grp; grp = grp->next) {
+    struct panel *pan;
+    for (pan = grp->panels; pan; pan = pan->next) {
+      struct cell *c;
+      for (c = pan->cells; c; c = c->next) {
+        int j;
+        switch (c->gen) {
+          case CELL_G:
+            if (gen == 2) {
+              insert_lc_into_table(table->lcs, lac, c->cid, c);
+            }
+            break;
+          case CELL_U:
+            if (gen == 3) {
+              insert_lc_into_table(table->lcs, lac, c->cid, c);
+            }
+            break;
+        }
+      }
+    }
+  }
+}
+
 static void insert_lc_table(struct tower_table *table)/*{{{*/
 {
   int i;
