@@ -1,0 +1,29 @@
+Generating tiles in bulk - e.g. initially, or after wiping the tc/ directory,
+or after using the 'B' key in viewer.tcl to remove an area of tiles that are
+stale due to new readings, updates to the tower file etc.
+
+Examples:
+
+-----------------------------------
+
+../cstum/listover -m 11 out/overlay.db | egrep -v '^m' | xargs -n 1 -P 4 python ../cstum/tools/batch_tiler.py
+
+Notes:
+- "-m 11" tells listover to list all unrendered tiles at zoom level 11 and coarser
+- "egrep -v '^m'" removes the "todo" tiles from the list, so only the coverage tiles are rendered
+- "-P 4" causes 4 renderers to run in parallel
+
+-----------------------------------
+
+../cstum/listover -n 51.45 -2.6 50000 -m 16 out/overlay.db| egrep -v '^m' | xargs -n 1 -P 4 python ../cstum/tools/batch_tiler.py
+
+This will render all tiles at all zoom levels (16 being the deepest supported)
+in a 50km region around central Bristol.
+
+-----------------------------------
+
+../cstum/listover -m 14 out/overlay.db| egrep -v '^m' | nice -19 xargs -n 1 -P 2 python ../cstum/tools/batch_tiler.py
+
+Renders all coverage tiles at zoom level 14 and coarser, putting slightly less
+of a load on the machine
+
