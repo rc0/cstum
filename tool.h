@@ -200,10 +200,6 @@ struct tower2 /*{{{*/
   int index;
   /* Count number of subtiles displayed as this tower */
   int display_count;
-  /* Flag indicating the tower has a large display_count relative to its
-   * neighbours therefore must be be preferred for getting the better colours
-   * */
-  int gold_card;
 };
 /*}}}*/
 struct tower_table/*{{{*/
